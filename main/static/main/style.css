@@ -178,7 +178,7 @@ button:hover {
 }
 
 .navbar ul li:nth-last-child(-n+4) {
-  margin-left: auto; /* Pushes Register and Login to the right */
+  margin-left: auto; /* Pushes Register and Login to the   right */
 }
 
 .navbar ul li:nth-last-child(-n+2) {
