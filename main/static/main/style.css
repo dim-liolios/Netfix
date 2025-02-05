@@ -177,6 +177,14 @@ button:hover {
   margin-right: 20px;
 }
 
+.navbar ul li:nth-last-child(-n+4) {
+  margin-left: auto; /* Pushes Register and Login to the right */
+}
+
+.navbar ul li:nth-last-child(-n+2) {
+  margin-left: auto; /* Pushes Register and Login to the right */
+}
+
 /* ============================================================================================== */
 
 /* ======================================== Service Info ======================================== */
