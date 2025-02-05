@@ -11,7 +11,8 @@ class User(AbstractUser):
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    
+    birth = models.IntegerField(default=0)
+
     def __str__(self):
         return str(self.user.id) + " -  " + self.user.username
 
