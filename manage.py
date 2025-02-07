@@ -22,6 +22,9 @@ if __name__ == "__main__":
     execute_from_command_line(sys.argv)
 
 
-    # services: handles the essential features related to services (service creation, services display, service request ...)
-    # users: handles the essential features related to the users (user registration, user profile, user login ...)
-    # main: handles the information that is common in all the project (home page, navigation bar, logout page ...)
+# netfix: views.py => customer_profile(request)
+# main:  -
+# users: customer/company forms (forms.py)
+         # register_company.html
+         # register_customer.html
+# services:

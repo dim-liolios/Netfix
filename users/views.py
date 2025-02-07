@@ -40,5 +40,16 @@ class CompanySignUpView(CreateView):
         return redirect("/")
 
 
-def LoginUserView(request):
-    return render(request, "users/register.html")
+class LoginUserView(CreateView):
+    model = User
+    form_class = UserLoginForm
+    template_name = "users/login_user.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs["user_type"] = "customer"
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect("/")

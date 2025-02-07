@@ -2,11 +2,11 @@ from django.urls import path
 from django.contrib.auth import views
 
 from .forms import UserLoginForm
-from . import views as v
+from . import views
 
 urlpatterns = [
-    path('', v.register, name='register'),
-    path('company/', v.CompanySignUpView.as_view(), name='register_company'),
-    path('customer/', v.CustomerSignUpView.as_view(), name='register_customer'),
-    path('login/', v.LoginUserView, name='login_user')
+    path("", views.register, name="register"),
+    path("login/", views.LoginUserView.as_view(), name="login_user"),
+    path("company/", views.CompanySignUpView.as_view(), name="register_company"),
+    path("customer/", views.CustomerSignUpView.as_view(), name="register_customer"),
 ]
