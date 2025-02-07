@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, authenticate
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
 from django.db import transaction
 from django.core.exceptions import ValidationError
 
@@ -32,3 +33,18 @@ class UserLoginForm(forms.Form):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["autocomplete"] = "off"
         # tells browsers not to suggest previously entered emails
+
+    def clean(self):
+        cleaned_data = super().clean()  # => method of parent class forms.Form that returns
+        # a dictionary where keys are the "email", "pass" etc and values the user's inputs
+        # it validates each field seperately
+
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        if email and password:
+            user = authenticate(username=email, password=password)
+            if not user:
+                raise forms.ValidationError("Invalid email or password.")
+
+        return cleaned_data

@@ -11,6 +11,9 @@ class User(AbstractUser):
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # The OneToOneField is a type of database relationship in Django. It's used to create
+    # a one-to-one relationship between two models, meaning each record in the first model
+    # corresponds to exactly one record in the second model, and vice versa
     birth = models.IntegerField(default=0)
 
     def __str__(self):
