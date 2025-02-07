@@ -8,5 +8,5 @@ urlpatterns = [
     path("company/", views.CompanySignUpView.as_view(), name="register_company"),
     path("customer/", views.CustomerSignUpView.as_view(), name="register_customer"),
     # as_view() is a method provided by Django that creates an instance of the class-based view (CustomerSignUpView)
-    # and makes it callable as a normal function/view.
+    # and makes it callable as a normal function/view
 ]

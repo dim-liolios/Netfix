@@ -33,14 +33,11 @@ class CustomerSignUpView(CreateView):
         kwargs["user_type"] = "customer"
         return super().get_context_data(**kwargs)
         # this is used to add extra information to the context that will be passed to
-        # the template (we have a customer user)
+        # the template (user = customer)
 
-    def form_valid(self, form):
-        # this form argument is the validated instance of the CustomerSignUpForm
-        user = form.save()
-        # the user is created here
-        login(self.request, user)
-        # he is immediatly logged in here
+    def form_valid(self, form):  # this form argument is the validated instance of the CustomerSignUpForm
+        user = form.save()  # the user is created here
+        login(self.request, user)  # he is immediatly logged in here
         return redirect("/")
 
 
