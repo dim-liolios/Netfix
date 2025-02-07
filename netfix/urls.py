@@ -24,7 +24,6 @@ urlpatterns = [
     path("", include("main.urls")),
     path("services/", include("services.urls")),
     path("register/", include("users.urls")),
-    path("login/", include("users.urls")),
     path("customer/<slug:name>", views.customer_profile, name="customer_profile"),
     path("company/<slug:name>", views.company_profile, name="company_profile"),
     path("admin/", admin.site.urls),

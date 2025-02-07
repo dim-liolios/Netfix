@@ -6,10 +6,23 @@ from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
 
 
+# USER LOGIN
+def login(request):
+    login_form = UserLoginForm
+    return render(request, "main/login_user.html", {"form": login_form})
+
+
+# CHOOSE USER TYPE TO REGISTER MENU/SCREEN
 def register(request):
     return render(request, "users/register.html")
 
 
+# the following 2 classes work as the previous login function but for register. The reason
+# we use a class instead of a function while calling the appropriate form (class),is that
+# the registration process is more complicated
+
+
+# CUSTOMER REGISTRATION
 class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
@@ -21,10 +34,13 @@ class CustomerSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        # the user is created here
         login(self.request, user)
+        # he is immediatly logged in here
         return redirect("/")
 
 
+# COMPANY REGISTRATION
 class CompanySignUpView(CreateView):
     model = User
     form_class = CompanySignUpForm
@@ -32,21 +48,6 @@ class CompanySignUpView(CreateView):
 
     def get_context_data(self, **kwargs):
         kwargs["user_type"] = "company"
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect("/")
-
-
-class LoginUserView(CreateView):
-    model = User
-    form_class = UserLoginForm
-    template_name = "users/login_user.html"
-
-    def get_context_data(self, **kwargs):
-        kwargs["user_type"] = "customer"
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):

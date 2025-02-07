@@ -25,12 +25,10 @@ class CompanySignUpForm(UserCreationForm):
 
 
 class UserLoginForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(UserLoginForm, self).__init__(*args, **kwargs)
-
     email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Enter Email"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Enter Password"}))
 
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields["email"].widget.attrs["autocomplete"] = "off"
+        # tells browsers not to suggest previously entered emails

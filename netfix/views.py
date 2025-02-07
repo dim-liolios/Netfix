@@ -7,7 +7,6 @@ from services.models import Service
 def home(request):
     return render(request, "users/home.html", {"user": request.user})
 
-
 def customer_profile(request):
     # need edit
     user = User.objects.get(username=name)
