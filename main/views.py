@@ -26,7 +26,10 @@ def login(request):
             user = form.cleaned_data["user"]
             login(request, user)  # logs the user in
             return redirect("/")  # redirects to homepage
-        
+        else:
+            form.add_error(None, "Invalid email and/or password. If you don't have an account, you have to register first.")
+            return render(request, "main/login_user.html", {"form": form})
+
     # else method is GET when the user first opens the page and no input has been passed
     else:
         form = UserLoginForm()  # Create an empty form for GET requests
