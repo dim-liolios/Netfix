@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login
+from django.contrib import messages
 from django.views.generic import CreateView, TemplateView
+import logging
 
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User
 
+logger = logging.getLogger(__name__)
 
 # =================================================================================================
 
@@ -55,6 +58,12 @@ class CompanySignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.instance
-        login(self.request, user)
-        return redirect("/")
+        if form.is_valid():
+            logger.info("✅ Form is valid!")
+            user = form.save()
+            logger.info(f"✅ User saved: {user.username}")
+            login(self.request, user)
+            return redirect("/")
+        else:
+            logger.error("❌ Form errors: %s", form.errors)
+            return self.form_invalid(form)

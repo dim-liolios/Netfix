@@ -4,17 +4,21 @@ from django.contrib.auth import authenticate
 from django.db import transaction
 from django.core.exceptions import ValidationError
 
+import logging
+
 from .models import User, Company, Customer
+
+logger = logging.getLogger(__name__)
 
 
 class DateInput(forms.DateInput):
     input_type = "date"
 
 
-def validate_email(value):
-    # In case the email already exists in an email input in a registration form, this function is fired
-    if User.objects.filter(email=value).exists():
-        raise ValidationError(value + " is already taken.")
+# def validate_email(value):
+#     # In case the email already exists in an email input in a registration form, this function is fired
+#     if User.objects.filter(email=value).exists():
+#         raise ValidationError(value + " is already taken.")
 
 
 class CustomerSignUpForm(UserCreationForm):
@@ -39,6 +43,7 @@ class CompanySignUpForm(UserCreationForm):
         self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Enter password"})
         self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Re-enter same password"})
 
+        self.fields["username"].widget.attrs["autocomplete"] = "off"
         self.fields["email"].widget.attrs["autocomplete"] = "off"
 
     def clean_email(self):
@@ -58,9 +63,11 @@ class CompanySignUpForm(UserCreationForm):
         user.is_company = True
 
         if commit:
-            user.save()  # saving the user instance (making a User Class object)
+            user.save()  # saving the user as Company
+            logger.info(f"✅ User saved: {user.username}")
             Company.objects.create(user=user, field=self.cleaned_data["field_of_work"])
             # creating the company instance and link it to the user
+            logger.info("✅ Company created!")
 
         return user
 

@@ -1,11 +1,15 @@
 useful shell commands for testing:
 
+
+
 from users.models import User, Company
 
 user = User.objects.create(username="testuser", email="test@example.com", is_company=True)
 user.set_password("testpassword")
 user.save()
 user.is_active = True
+
+user = User.objects.get(username="testuser") (for a new instance of this object/user every time i open shell)
 
 checks:
     user.id
