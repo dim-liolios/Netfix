@@ -17,9 +17,19 @@ checks:
     User.objects.all()
     print(user.is_active)
 
+    all_usernames = User.objects.values_list('username', flat=True)
+    print(list(username))
+
 Login:
     user = authenticate(username="testuser", password="testpassword")
 print(user)
+
+delete:
+    user = User.objects.get(username='testuser')
+    user = User.objects.get(id=1)
+    user.delete()
+
+    User.objects.all().delete()
 
 
 company = Company.objects.create(user=user, field="Electricity")

@@ -59,11 +59,11 @@ class CompanySignUpView(CreateView):
 
     def form_valid(self, form):
         if form.is_valid():
-            logger.info("✅ Form is valid!")
+            print("✅ Form is valid!")
             user = form.save()
-            logger.info(f"✅ User saved: {user.username}")
+            print(f"✅ User saved: {user.username}")
             login(self.request, user)
             return redirect("/")
         else:
-            logger.error("❌ Form errors: %s", form.errors)
+            print("❌ Form errors: %s", form.errors)
             return self.form_invalid(form)
