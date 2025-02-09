@@ -22,29 +22,63 @@ class CustomerSignUpForm(UserCreationForm):
 
 
 class CompanySignUpForm(UserCreationForm):
-    pass
+    field_of_work = forms.ChoiceField(
+        choices=Company._meta.get_field("field").choices,
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+
+    class Meta:
+        model = User
+        fields = ["username", "password1", "password2", "email", "field_of_work"]
+        # thats the order the fields appear in the form but ONLY when i use {{ form }} in html
+
+    def __init__(self, *args, **kwargs):
+        super(CompanySignUpForm, self).__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Enter username"})
+        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Enter email"})
+        self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Enter password"})
+        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Re-enter same password"})
+
+        self.fields["email"].widget.attrs["autocomplete"] = "off"
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already in use.")
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("This username is already taken.")
+        return username
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_company = True
+
+        if commit:
+            user.save()  # saving the user instance (making a User Class object)
+            Company.objects.create(user=user, field=self.cleaned_data["field_of_work"])
+            # creating the company instance and link it to the user
+
+        return user
 
 
 class UserLoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Enter Email"}))
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Username"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Enter Password"}))
+    # Django built-in authenticate() uses username and password, not email
 
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
-        self.fields["email"].widget.attrs["autocomplete"] = "off"
+        self.fields["username"].widget.attrs["autocomplete"] = "off"
         # tells browsers not to suggest previously entered emails
 
     def clean(self):
         cleaned_data = super().clean()  # => method of parent class forms.Form that returns
         # a dictionary where keys are the "email", "pass" etc and values the user's inputs
-        # it validates each field seperately
-
-        email = cleaned_data.get("email")
-        password = cleaned_data.get("password")
-
-        if email and password:
-            user = authenticate(username=email, password=password)
-            if not user:
-                raise forms.ValidationError("Invalid email or password.")
-
         return cleaned_data
+
+    # clean(self) ensures the form is valid as a whole, while Django’s built-in validation
+    # (super.clean()) ensures each field is valid individually

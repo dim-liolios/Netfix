@@ -36,7 +36,7 @@ class CustomerSignUpView(CreateView):
         # the template (user = customer)
 
     def form_valid(self, form):  # this form argument is the validated instance of the CustomerSignUpForm
-        user = form.save()  # the user is created here
+        user = form.instance
         login(self.request, user)  # he is immediatly logged in here
         return redirect("/")
 
@@ -55,6 +55,6 @@ class CompanySignUpView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        user = form.save()
+        user = form.instance
         login(self.request, user)
         return redirect("/")

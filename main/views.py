@@ -18,17 +18,20 @@ def logout(request):
     # essentially ending their authentication session
 
 
-def login(request):
+def login_view(request):
     # method is POST when the user has entered his credentials
     if request.method == "POST":
         form = UserLoginForm(request.POST)  # this form contains the submitted data from the user
         if form.is_valid():
-            user = form.cleaned_data["user"]
-            login(request, user)  # logs the user in
-            return redirect("/")  # redirects to homepage
-        else:
-            form.add_error(None, "Invalid email and/or password. If you don't have an account, you have to register first.")
-            return render(request, "main/login_user.html", {"form": form})
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)  # logs the user in
+                return redirect("/")  # redirects to homepage logged in
+            else:
+                form.add_error(None, "Invalid email and/or password. If you don't have an account, you have to register first.")
+        return render(request, "main/login_user.html", {"form": form})
 
     # else method is GET when the user first opens the page and no input has been passed
     else:

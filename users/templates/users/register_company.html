@@ -1,13 +1,40 @@
 {% extends 'main/base.html' %} 
 {% block title %}
   Company Registration
-{%endblock %}
+{% endblock %}
 
 {% block content %}
     <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <span class="helptext">Choose Field Above</span>
-        <button type="submit" name="register">Register</button>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="id_username">Username</label>
+        {{ form.username }}
+        <div class="help-text">{{ form.username.help_text }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_password1">Password</label>
+        {{ form.password1 }}
+        <div class="help-text">{{ form.password1.help_text }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_password2">Confirm Password</label>
+        {{ form.password2 }} 
+        <div class="help-text">{{ form.password2.help_text }}</div>
+      </div>
+
+      <div class="form-group">
+        <label for="id_email">Email</label>
+        {{ form.email }}
+      </div>
+      <div class="form-group">
+        <label for="id_field_of_work">Field of Work</label>
+        {{ form.field_of_work }}
+      </div>
+
+      <span class="helpmsg">Choose Field Above</span>
+      <button type="submit" name="register">Register</button>
     </form>
 {% endblock %}
