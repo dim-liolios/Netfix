@@ -17,12 +17,15 @@ class CompanySignUpForm(UserCreationForm):
     )
 
     class Meta:
+        # Meta class is a configuration class that sprovides metadata
+        # to Django about how the form should behave, especially when dealing with model forms.
         model = User
         fields = ["username", "password1", "password2", "email", "field_of_work"]
         # thats the order the fields appear in the form but ONLY when i use {{ form }} in html
 
     def __init__(self, *args, **kwargs):
-        super(CompanySignUpForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+        # super(CompanySignUpForm, self).__init__(*args, **kwargs)
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Enter username"})
         self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Enter email"})
         self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Enter password"})
@@ -48,9 +51,9 @@ class CompanySignUpForm(UserCreationForm):
     # unless is called in the form view
     def save(self, commit=True):
         user = super().save(commit=False)
-        # calling the parent class’ save()'s functionality first (UserCreationForm class's validation,
-        # field processing, and password handling), and then modify the object
-        # (like setting is_company = True) before it’s actually saved in the "if commit:" part below
+        # calling the parent class's save() method to handle the default validation, 
+        # password handling, and field processing before modifying the object 
+        # (like setting is_company = True) and saving it in the "if commit:" block below
         user.is_company = True
 
         if commit:
@@ -63,12 +66,21 @@ class CompanySignUpForm(UserCreationForm):
         return user
 
 class CustomerSignUpForm(UserCreationForm):
+    date_of_birth = forms.DateField(
+        widget=forms.DateInput(attrs={"class": "form-control", "placeholder": "Enter Date of Birth", "type": "date"}),
+        required=True
+    )
 
     class Meta:
         model = User
-        fields = ["username", "password1", "password2", "email", "field_of_work"]
+        fields = ["username", "password1", "password2", "email", "date_of_birth"]
 
     def __init__(self, *args, **kwargs):
+        self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Enter username"})
+        self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Enter email"})
+        self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Enter password"})
+        self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Re-enter same password"})
+        self.fields[date_of_birth].widget.attrs.update({"class": "form-control", "placeholder": "Enter Date of Birth"})
         self.fields["username"].widget.attrs["autocomplete"] = "off"
         self.fields["email"].widget.attrs["autocomplete"] = "off"
 
@@ -86,12 +98,12 @@ class CustomerSignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_company = True
+        user.is_customer = True
 
         if commit:
             user.save()
             print(f"✅ User saved: {user.username}")
-            Company.objects.create(user=user, field=self.cleaned_data["field_of_work"])
+            Customer.objects.create(user=user, field=self.cleaned_data["field_of_work"])
             print("✅ Company created!")
 
         return user

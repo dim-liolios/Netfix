@@ -6,7 +6,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class User(AbstractUser):
     is_customer = models.BooleanField(default=False)
     is_company = models.BooleanField(default=False)
-    # email = models.CharField(max_length=100, unique=True)
 
 
 class Customer(models.Model):
@@ -14,7 +13,7 @@ class Customer(models.Model):
     # The OneToOneField is a type of database relationship in Django. It's used to create
     # a one-to-one relationship between two models, meaning each record in the first model
     # corresponds to exactly one record in the second model, and vice versa
-    birth = models.IntegerField(default=0)
+    date_of_birth = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return str(self.user.id) + " -  " + self.user.username
