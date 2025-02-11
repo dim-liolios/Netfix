@@ -1,8 +1,8 @@
 useful shell commands for testing:
+----------------------------------
 
+from users.models import User, Customer, Company
 
-
-from users.models import User, Company
 
 user = User.objects.create(username="testuser", email="test@example.com", is_company=True)
 user.set_password("testpassword")
@@ -11,6 +11,10 @@ user.is_active = True
 
 user = User.objects.get(username="testuser") (for a new instance of this object/user every time i open shell)
 
+company = Company.objects.create(user=user, field="Electricity")
+Company.objects.all()
+
+==================================================================================================================
 checks:
     user.id
     User.objects.filter(email="test@example.com").exists()
@@ -20,10 +24,12 @@ checks:
     all_usernames = User.objects.values_list('username', flat=True)
     print(list(username))
 
+==================================================================================================================
 Login:
     user = authenticate(username="testuser", password="testpassword")
 print(user)
 
+==================================================================================================================
 delete:
     user = User.objects.get(username='testuser')
     user = User.objects.get(id=1)
@@ -31,6 +37,7 @@ delete:
 
     User.objects.all().delete()
 
-
-company = Company.objects.create(user=user, field="Electricity")
-Company.objects.all()
+==================================================================================================================
+reset DB pk:
+    python manage.py dbshell
+    DELETE FROM sqlite_sequence WHERE name='users_user';

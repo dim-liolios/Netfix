@@ -17,7 +17,7 @@ def register(request):
     return render(request, "users/register.html")
 
 
-# the following 2 classes work as the previous login function but for register. The reason
+# the following 2 classes work as the login function but for register. The reason
 # we use a class instead of a function while calling the appropriate form (class),is that
 # the registration process is more complicated
 # | | |

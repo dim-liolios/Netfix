@@ -51,8 +51,8 @@ class CompanySignUpForm(UserCreationForm):
     # unless is called in the form view
     def save(self, commit=True):
         user = super().save(commit=False)
-        # calling the parent class's save() method to handle the default validation, 
-        # password handling, and field processing before modifying the object 
+        # calling the parent class's save() method to handle the default validation,
+        # password handling, and field processing before modifying the object
         # (like setting is_company = True) and saving it in the "if commit:" block below
         user.is_company = True
 
@@ -65,10 +65,10 @@ class CompanySignUpForm(UserCreationForm):
 
         return user
 
+
 class CustomerSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(
-        widget=forms.DateInput(attrs={"class": "form-control", "placeholder": "Enter Date of Birth", "type": "date"}),
-        required=True
+        widget=forms.DateInput(attrs={"class": "form-control", "placeholder": "Enter Date of Birth", "type": "date"}), required=True
     )
 
     class Meta:
@@ -76,11 +76,13 @@ class CustomerSignUpForm(UserCreationForm):
         fields = ["username", "password1", "password2", "email", "date_of_birth"]
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         self.fields["username"].widget.attrs.update({"class": "form-control", "placeholder": "Enter username"})
         self.fields["email"].widget.attrs.update({"class": "form-control", "placeholder": "Enter email"})
         self.fields["password1"].widget.attrs.update({"class": "form-control", "placeholder": "Enter password"})
         self.fields["password2"].widget.attrs.update({"class": "form-control", "placeholder": "Re-enter same password"})
-        self.fields[date_of_birth].widget.attrs.update({"class": "form-control", "placeholder": "Enter Date of Birth"})
+        self.fields["date_of_birth"].widget.attrs.update({"class": "form-control", "placeholder": "Enter Date of Birth"})
         self.fields["username"].widget.attrs["autocomplete"] = "off"
         self.fields["email"].widget.attrs["autocomplete"] = "off"
 
@@ -103,10 +105,11 @@ class CustomerSignUpForm(UserCreationForm):
         if commit:
             user.save()
             print(f"✅ User saved: {user.username}")
-            Customer.objects.create(user=user, field=self.cleaned_data["field_of_work"])
-            print("✅ Company created!")
+            Customer.objects.create(user=user, date_of_birth=self.cleaned_data["date_of_birth"])
+            print("✅ Customer created!")
 
         return user
+
 
 class UserLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Username"}))
@@ -114,13 +117,26 @@ class UserLoginForm(forms.Form):
     # Django built-in authenticate() uses username and password, not email
 
     def __init__(self, *args, **kwargs):
-        super(UserLoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["username"].widget.attrs["autocomplete"] = "off"
         # tells browsers not to suggest previously entered emails
 
     def clean(self):
+        # i) makes sure required fields are not empty, strips unnecessary spaces and
+        # checks for form-wide validation rules (e.g., ensuring two password fields match in a registration form)
+        # ii) runs automatically when form.is_valid() is called in the view to:
+
         cleaned_data = super().clean()  # => method of parent class forms.Form that returns
-        # a dictionary where keys are the "email", "pass" etc and values the user's inputs
+        # a dictionary where keys are the "email", "pass" etc and values the user's inputs.
+
+        username = cleaned_data.get("username")
+        password = cleaned_data.get("password")
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if not user:
+                raise forms.ValidationError("Invalid username or password. If you don't have an account, register first.")
+
         return cleaned_data
 
     # clean(self) ensures the form is valid as a whole, while Django’s built-in validation

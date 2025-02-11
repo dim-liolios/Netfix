@@ -23,9 +23,9 @@ def login_view(request):
     if request.method == "POST":
         form = UserLoginForm(request.POST)  # this form contains the submitted data from the user
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(username=username, password=password)
+            user = authenticate(username=form.cleaned_data["username"], password=form.cleaned_data["password"])
+            # i) ses Django’s authentication system to verify credentials.
+            # ii) returns a User object if credentials are valid; otherwise, returns None.
             if user:
                 login(request, user)  # logs the user in
                 return redirect("/")  # redirects to homepage logged in
