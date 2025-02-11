@@ -35,6 +35,7 @@ class CompanySignUpForm(UserCreationForm):
         self.fields["username"].widget.attrs["autocomplete"] = "off"
         self.fields["email"].widget.attrs["autocomplete"] = "off"
 
+    # Django automatically calls any method in the form that starts with clean_, even custom ones.
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
@@ -47,8 +48,13 @@ class CompanySignUpForm(UserCreationForm):
             raise ValidationError("This username is already taken.")
         return username
 
+    # the save() method, custom ones or the default from the parent class never runs
+    # unless is called in the form view
     def save(self, commit=True):
         user = super().save(commit=False)
+        # calling the parent class’s save functionality first (UserCreationForm class's validation,
+        # field processing, and password handling), and then modify the object
+        # (like setting is_company = True) before it’s actually saved in the "if commit:" part below
         user.is_company = True
 
         if commit:
