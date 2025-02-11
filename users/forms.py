@@ -10,10 +10,6 @@ from .models import User, Company, Customer
 #     input_type = "date"
 
 
-class CustomerSignUpForm(UserCreationForm):
-    pass
-
-
 class CompanySignUpForm(UserCreationForm):
     field_of_work = forms.ChoiceField(
         choices=Company._meta.get_field("field").choices,
@@ -48,11 +44,11 @@ class CompanySignUpForm(UserCreationForm):
             raise ValidationError("This username is already taken.")
         return username
 
-    # the save() method, custom ones or the default from the parent class never runs
+    # by default in Django: the save() method, custom ones or the default from the parent class, never runs
     # unless is called in the form view
     def save(self, commit=True):
         user = super().save(commit=False)
-        # calling the parent class’s save functionality first (UserCreationForm class's validation,
+        # calling the parent class’ save()'s functionality first (UserCreationForm class's validation,
         # field processing, and password handling), and then modify the object
         # (like setting is_company = True) before it’s actually saved in the "if commit:" part below
         user.is_company = True
@@ -66,6 +62,39 @@ class CompanySignUpForm(UserCreationForm):
 
         return user
 
+class CustomerSignUpForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ["username", "password1", "password2", "email", "field_of_work"]
+
+    def __init__(self, *args, **kwargs):
+        self.fields["username"].widget.attrs["autocomplete"] = "off"
+        self.fields["email"].widget.attrs["autocomplete"] = "off"
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("This email is already in use.")
+        return email
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("This username is already taken.")
+        return username
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_company = True
+
+        if commit:
+            user.save()
+            print(f"✅ User saved: {user.username}")
+            Company.objects.create(user=user, field=self.cleaned_data["field_of_work"])
+            print("✅ Company created!")
+
+        return user
 
 class UserLoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Username"}))

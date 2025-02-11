@@ -39,9 +39,16 @@ class CustomerSignUpView(CreateView):
         # the template (user = customer)
 
     def form_valid(self, form):  # this form argument is the validated instance of the CustomerSignUpForm
-        user = form.save()
-        login(self.request, user)  # he is immediatly logged in here
-        return redirect("/")
+        if form.is_valid():
+            print("✅ Form is valid!")
+            user = form.save()
+            print(f"✅ User saved: {user.username}")
+            # when the form has pass the validation 
+            login(self.request, user)  # he is immediatly logged in here
+            return redirect("/")
+        else:
+            print("❌ Form errors: %s", form.errors)
+            return self.form_invalid(form)
 
     #  Django, internally knows and handles:
     #  when the page opens first time, the method is GET and get_context_data runs
