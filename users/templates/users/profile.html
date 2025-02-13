@@ -23,7 +23,7 @@
         <p class="title">Available Services</p>
     {% endif %}
     {% if user.is_customer %}
-        {% for service in sh %}
+        {% for service in requested_services %}
             <div>
                 <a href="/services/{{service.service.id}}">{{service.service.name}}</a> ({{service.service.field}})
                 <p style="margin: 0; display: inline-block;"> ❱❱ {{service.price}}</p>
