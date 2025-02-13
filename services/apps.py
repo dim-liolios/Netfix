@@ -11,4 +11,4 @@ class ServicesConfig(AppConfig):
 
 # default_auto_field = "django.db.models.BigAutoField": This setting specifies the default field type
 # for automatically incrementing primary keys (IDs) in models. The BigAutoField type is an integer that
-#     auto-increments with a larger range (64-bit).
+# auto-increments with a larger range (64-bit).
