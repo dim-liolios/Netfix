@@ -26,11 +26,11 @@ def create_service(request):
         company_field = company.field
 
         #  the request.POST contains all the data submitted by the user
-        form = CreateNewService(request.POST)
+        form = CreateNewService(request.POST, company_field=company_field)
         if form.is_valid():
             # if the form is valid a new Service object is created and saved to the database
             Service.objects.create(
-                company=Company.objects.get(user=request.user),
+                company=company,
                 name=form.cleaned_data["name"],
                 description=form.cleaned_data["description"],
                 price_hour=form.cleaned_data["price_hour"],
