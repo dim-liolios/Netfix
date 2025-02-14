@@ -7,19 +7,24 @@ from .models import Service
 from .forms import CreateNewService, RequestServiceForm
 
 
-def service_list(request):
+def list_of_services(request):
     services = Service.objects.all().order_by("-date")
-    return render(request, "services/list.html", {"services": services})
+    return render(request, "services/list_of_services.html", {"services": services})
 
 
-def index(request, id):
-    service = Service.objects.get(id=id)
+def single_service(request, id):
+    service = Service.objects.get(id=id)  # Get the service by ID
     return render(request, "services/single_service.html", {"service": service})
 
 
-def create(request):
+def create_service(request):
     if request.method == "POST":
         # if the request is POST, this creates an instance of CreateNewService form
+        # with all the data input from the user
+
+        company = Company.objects.get(user=request.user)
+        company_field = company.field
+
         #  the request.POST contains all the data submitted by the user
         form = CreateNewService(request.POST)
         if form.is_valid():
@@ -32,17 +37,21 @@ def create(request):
                 field=form.cleaned_data["field"],
             )
             return redirect("services_list")
+        else:
+            print(form.errors)
     else:
-        form = CreateNewService(choices=Service.choices)
+        company = Company.objects.get(user=request.user)
+        company_field = company.field
+        form = CreateNewService(company_field=company_field)
 
-    return render(request, "services/create.html", {"form": form})
+    return render(request, "services/create_service.html", {"form": form})
 
 
-def service_field(request, field):
+def services_per_field(request, field):
     # search for the service present in the url
     field = field.replace("-", " ").title()
     services = Service.objects.filter(field=field)
-    return render(request, "services/field.html", {"services": services, "field": field})
+    return render(request, "services/services_per_field.html", {"services": services, "field": field})
 
 
 def request_service(request, id):
