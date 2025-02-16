@@ -245,6 +245,59 @@ pre {
   font-size: x-large;
 }
 
+/* General styles */
+body {
+  background: #292929;
+  font-family: 'Lexend Exa', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+/* Service List Styles */
+.services_list_wrapper {
+  margin-bottom: 30px; /* Optional for spacing */
+}
+
+.services_list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.service-item {
+  display: flex; 
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.company {
+  display: inline-flex; /* Make the company info inline with the rest */
+  margin-left: auto; /* Push the company info to the right */
+}
+
+.service-item a {
+  color: #ee5e4b;
+  text-decoration: none;
+}
+
+.service-item a:hover {
+  text-decoration: underline;
+}
+
+/* Styling the links */
+a {
+  color: #ee5e4b;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #e02a21;
+  text-shadow: 0px 0px 2px #a1a1a1;
+}
+
+
+
 /* ============================================================================================== */
 
 /* ===================================== Choose user type ======================================= */

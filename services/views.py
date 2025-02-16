@@ -37,8 +37,8 @@ def create_service(request):
                 field=form.cleaned_data["field"],
             )
             return redirect("services_list")
-        else:
-            print(form.errors)
+        # else:
+        #     print(form.errors)
     else:
         company = Company.objects.get(user=request.user)
         company_field = company.field
