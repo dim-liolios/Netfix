@@ -29,3 +29,10 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+    
+class RequstServive(models.Model):
+    name = 
+    field = 
+    calc_cost = 
+    date =
+    company = 

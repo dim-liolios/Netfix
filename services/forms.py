@@ -30,5 +30,12 @@ class CreateNewService(forms.Form):
         self.fields["price_hour"].widget.attrs["autocomplete"] = "off"
 
 
-class RequestServiceForm(forms.Form):
-    pass
+class RequestService(forms.Form):
+    address = forms.CharField(max_length=100)
+    service_hours = forms.DecimalField(max_digits=100, decimal_places=1)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["address"].widget.attrs["placeholder"] = "Enter AddressDescription"
+        self.fields["service_hours"].widget.attrs["placeholder"] = "Enter Service Hours"

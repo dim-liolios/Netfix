@@ -3,8 +3,8 @@ from django.http import HttpResponseRedirect
 
 from users.models import Company, Customer, User
 
-from .models import Service
-from .forms import CreateNewService, RequestServiceForm
+from services.models import Service
+from services.forms import CreateNewService, RequestService
 
 
 def list_of_services(request):
@@ -55,4 +55,25 @@ def services_per_field(request, field):
 
 
 def request_service(request, id):
-    return render(request, "services/request_service.html", {})
+    if request.method == "POST":
+        company = Company.objects.get(user=request.user)
+        company_field = company.field
+
+    form = RequestService(request.POST)
+    if form.is_valid():
+        Service.objects.create(
+            company=company,
+            name=form.cleaned_data["name"],
+            description=form.cleaned_data["description"],
+            price_hour=form.cleaned_data["price_hour"],
+            field=form.cleaned_data["field"],
+        )
+        return redirect("services_list")
+    # else:
+    #     print(form.errors)
+    else:
+        company = Company.objects.get(user=request.user)
+        company_field = company.field
+        form = CreateNewService(company_field=company_field)
+
+    return render(request, "services/create_service.html", {"form": form, "id":id})
