@@ -18,11 +18,15 @@
             </ul>
         </li>
         {% if request.user.is_authenticated %}
-        <li><a href="/company/{{ request.user.username }}">Profile</a></li>
-        <li><a href="/logout/">Logout</a></li>
+            {% if request.user.is_customer %}
+                <li><a href="/customer/{{ request.user.username }}">Profile</a></li>
+            {% elif request.user.is_company %}
+                <li><a href="/company/{{ request.user.username }}">Profile</a></li>
+            {% endif %}
+            <li><a href="/logout/">Logout</a></li>
         {% else %}
-        <li><a href="/login/">Login</a></li>
-        <li><a href="/register/">Register</a></li>
+            <li><a href="/login/">Login</a></li>
+            <li><a href="/register/">Register</a></li>
         {% endif %}
     </ul>
 </nav>

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from users.models import User, Company
-from services.models import Service
+from users.models import User, Company, Customer
+from services.models import Service, RequestService
 
 
 def home(request):
@@ -9,8 +9,11 @@ def home(request):
 
 
 def customer_profile(request, name):
-
     user = User.objects.get(username=name)
+
+    customer = Customer.objects.get(user=user)
+
+    requested_services = RequestService.objects.filter(customer=customer)
 
     return render(request, "users/profile.html", {"user": user, "requested_services": requested_services})
 

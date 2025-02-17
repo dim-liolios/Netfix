@@ -1,7 +1,6 @@
 from django import forms
-  
-from users.models import Company
-from .models import Service
+
+from .models import Service, RequestService
 
 
 class CreateNewService(forms.Form):
@@ -30,12 +29,15 @@ class CreateNewService(forms.Form):
         self.fields["price_hour"].widget.attrs["autocomplete"] = "off"
 
 
-class RequestService(forms.Form):
-    address = forms.CharField(max_length=100)
-    service_hours = forms.DecimalField(max_digits=100, decimal_places=1)
+class RequestServiceForm(forms.ModelForm):
+    address = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        # class Meta is how you tell Django which model the form is for and which fields should be included in the form.
+        model = RequestService
+        fields = ["service_hours", "address"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.fields["address"].widget.attrs["placeholder"] = "Enter AddressDescription"
         self.fields["service_hours"].widget.attrs["placeholder"] = "Enter Service Hours"
+        self.fields["address"].widget.attrs["placeholder"] = "Enter Address"

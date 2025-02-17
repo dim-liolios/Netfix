@@ -17,7 +17,7 @@ class CompanySignUpForm(UserCreationForm):
     )
 
     class Meta:
-        # Meta class is a configuration class that sprovides metadata
+        # Meta class is a configuration class that provides metadata
         # to Django about how the form should behave, especially when dealing with model forms.
         model = User
         fields = ["username", "password1", "password2", "email", "field_of_work"]

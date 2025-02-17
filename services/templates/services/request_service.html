@@ -5,7 +5,24 @@
 
 {% block content %}
     <p class="title">Service Request Details</p>
+    
+    <!-- Form to request the service -->
     <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Display the form fields -->
+        <div class="form-group">
+            <label for="service_hours">Service Hours</label>
+            {{ form.service_hours }}
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address</label>
+            {{ form.address }}
+        </div>
+
+        <!-- Submit button -->
         <button type="submit">Request</button>
     </form>
+
 {% endblock %}

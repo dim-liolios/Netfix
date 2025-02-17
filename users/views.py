@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from django.contrib import messages
-from django.views.generic import CreateView, TemplateView
-import logging
+from django.views.generic import CreateView
 
-from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
+from .forms import CustomerSignUpForm, CompanySignUpForm
 from .models import User
 
-logger = logging.getLogger(__name__)
 
 # =================================================================================================
 
