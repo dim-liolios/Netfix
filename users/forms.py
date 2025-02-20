@@ -1,13 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from django.db import transaction
 from django.core.exceptions import ValidationError
 
 from .models import User, Company, Customer
-
-# class DateInput(forms.DateInput):
-#     input_type = "date"
 
 
 class CompanySignUpForm(UserCreationForm):
@@ -141,3 +137,5 @@ class UserLoginForm(forms.Form):
 
     # clean(self) ensures the form is valid as a whole, while Django’s built-in validation
     # (super.clean()) ensures each field is valid individually
+
+# this form is used to login view in main/views.py

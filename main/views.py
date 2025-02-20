@@ -38,4 +38,4 @@ def login_view(request):
         form = UserLoginForm()  # Create an empty form for GET requests
         return render(request, "main/login_user.html", {"form": form})
 
-    # we imprort the users' login form from users app -> forms.py
+    # we imprort the users' login form from users/forms.py
