@@ -1,3 +1,9 @@
+1. /admin
+2. 
+3. most requested services
+4. 404 to whole project
+5. all other errors (300,500...)
+
 ----------------------------------
 useful shell commands for testing:
 ----------------------------------
@@ -35,6 +41,8 @@ delete:
     user = User.objects.get(username='testuser')
     user = User.objects.get(id=1)
     user.delete()
+
+    User.objects.get(username="admin").delete() => delete the admin
 
     User.objects.all().delete()
 

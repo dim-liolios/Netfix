@@ -19,7 +19,7 @@ class CreateNewService(forms.Form):
         else:
             self.fields["field"].choices = [(company_field, company_field)]
 
-        # Adding placeholders to the fields
+        # adding placeholders to the fields
         self.fields["name"].widget.attrs["placeholder"] = "Enter Service Name"
         self.fields["description"].widget.attrs["placeholder"] = "Enter Description"
         self.fields["price_hour"].widget.attrs["placeholder"] = "Enter Price per Hour"
@@ -30,7 +30,8 @@ class CreateNewService(forms.Form):
 
 
 class RequestServiceForm(forms.ModelForm):
-    address = forms.CharField(widget=forms.Textarea)
+    address = forms.CharField(max_length=100)
+    # we dont have to declare service_hours because it is declared in the request_service model
 
     class Meta:
         # class Meta is how you tell Django which model the form is for and which fields should be included in the form.
@@ -41,3 +42,14 @@ class RequestServiceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["service_hours"].widget.attrs["placeholder"] = "Enter Service Hours"
         self.fields["address"].widget.attrs["placeholder"] = "Enter Address"
+
+
+# forms.ModelForm vs forms.Form:
+# ------------------------------
+
+# ModelForm: when the form directly represents a model and we intend to save data to that model
+# also it is easier to maintain—if your model changes, the form adapts more easily
+
+# Form: when the form does not directly map to a model or requires custom logic unrelated to a model
+# also when form fields are dynamic (e.g., __init__ logic to set choices based on context like
+# the company_field in the CreateNewService form)
