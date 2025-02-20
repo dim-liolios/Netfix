@@ -13,7 +13,7 @@ def customer_profile(request, name):
 
     customer = Customer.objects.get(user=user)
 
-    requested_services = RequestService.objects.filter(customer=customer)
+    requested_services = RequestService.objects.filter(customer=customer).order_by("-requested_date")
 
     return render(request, "users/profile.html", {"user": user, "requested_services": requested_services})
 

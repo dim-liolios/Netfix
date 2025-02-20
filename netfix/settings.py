@@ -23,9 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "-4c+@3tup)%is6x+4s1(c39ozkx_4u21_c!k5i1)_szqpn+f_c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+# When also hosting on the interet:
+# ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'netfix.com', 'www.netfix.com']
+
 
 AUTH_USER_MODEL = "users.User"
 
@@ -114,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Athens"
 
 USE_I18N = True
 

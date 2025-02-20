@@ -16,6 +16,13 @@ def single_service(request, id):
     return render(request, "services/single_service.html", {"service": service})
 
 
+def services_per_field(request, field):
+    # search for the service present in the url
+    field = field.replace("-", " ").title()
+    services = Service.objects.filter(field=field)
+    return render(request, "services/services_per_field.html", {"services": services, "field": field})
+
+
 def create_service(request):
     if request.method == "POST":
         # if the request is POST, this creates an instance of CreateNewService form
@@ -44,13 +51,6 @@ def create_service(request):
         form = CreateNewService(company_field=company_field)
 
     return render(request, "services/create_service.html", {"form": form})
-
-
-def services_per_field(request, field):
-    # search for the service present in the url
-    field = field.replace("-", " ").title()
-    services = Service.objects.filter(field=field)
-    return render(request, "services/services_per_field.html", {"services": services, "field": field})
 
 
 def request_service(request, id):
@@ -88,3 +88,12 @@ def request_service(request, id):
         form = RequestServiceForm()
 
     return render(request, "services/request_service.html", {"form": form, "service": service})
+
+
+# get() vs get_object_or_404():
+# -----------------------------
+
+# in create_service view the company we request with get is the one that is already registered and logged in, so there
+# is no chance we cant get that Comapny object
+# on the other hand when we request a Service object by id, we can request something that doesnt exist,
+# for example the client can try an id number in the url that doesnt correspond to a Service 
