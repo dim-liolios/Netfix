@@ -64,7 +64,11 @@ class CompanySignUpForm(UserCreationForm):
 
 class CustomerSignUpForm(UserCreationForm):
     date_of_birth = forms.DateField(
-        widget=forms.DateInput(attrs={"class": "form-control", "placeholder": "Enter Date of Birth", "type": "date"}), required=True
+        widget=forms.DateInput(attrs={"class": "form-control", "placeholder": "Enter Date of Birth", "type": "date"}),
+        required=True,
+        # in Django forms, a widget is a class that determines how a form field is rendered as HTML and how it accepts user input
+        # by default widget for DateField is a text input, but if we change it to DateInput and adding type="date" the user
+        # doesnt have to type the date manually but can select it from a calendar graphic (date picker)
     )
 
     class Meta:
@@ -137,5 +141,6 @@ class UserLoginForm(forms.Form):
 
     # clean(self) ensures the form is valid as a whole, while Django’s built-in validation
     # (super.clean()) ensures each field is valid individually
+
 
 # this form is used to login view in main/views.py
