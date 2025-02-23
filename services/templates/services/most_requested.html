@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Most Requested Services{% endblock %}
+
+{% block content %}
+<h1>Most Requested Services</h1>
+<ul>
+    {% for service in services %}
+        <li>
+            <a href="{% url 'service_detail' service.id %}">{{ service.name }}</a>
+            - {{ service.request_count }} requests
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
