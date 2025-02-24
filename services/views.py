@@ -25,28 +25,18 @@ def services_per_field(request, field):
 
 
 def most_requested_services(request):
-    most_requested = (
-        RequestService.objects.values("service")
-        # group by Service foreign key
-        .annotate(request_count=Count("service"))
-        # count requests per service
-        .order_by("-request_count")[:10]
-        # order by most requested
-    )
-
-    services = Service.objects.filter(id__in=[item["service"] for item in most_requested])
-    # its better to get the actual Service objects for display by filtering with the service IDs from the
-    #  first query. This lets us access all Service attributes (name, description, etc)
-    # what this line does:
-    # -- each item in most_requested is a dictionary with these keys: {'service': 3, 'request_count': 15}
-    # -- item["service"] represents the ID of the requested service
-    # -- list comprehension: it creates a list of service IDs from the most_requested queryset. Example: [3, 7, 12, 4, 9]
-    # -- id__in: This is a Django lookup that filters by a list of values (SQL IN clause):
-    # SELECT * FROM service
-    # WHERE id IN (3, 7, 12, 4, 9)
+    services = (Service.objects
+                .annotate(request_count=Count("requestservice"))
+                .order_by("-request_count")[:10]
+                )
+    # - annotate() adds aggregated data (like sums, counts, averages) to each object in the queryset
+    # - Count("requestservice") counts how many related RequestService entries are linked to each Service
+    # stores the result in a new attribute called request_count.
+    # - "requestservice" refers to the reverse ForeignKey relationship from RequestService to Service
+    # Django auto-generates this name based on the model name (requestservice_set by default)
+    # - this uses Django's ORM to perform a SQL JOIN and COUNT.
 
     return render(request, "services/most_requested.html", {"services": services})
-    # Count: An aggregation function from Django’s django.db.models—used to count records in the database
 
 
 def create_service(request):
@@ -123,3 +113,69 @@ def request_service(request, id):
 # is no chance we cant get that Comapny object
 # on the other hand when we request a Service object by id, we can request something that doesnt exist,
 # for example the client can try an id number in the url that doesnt correspond to a Service
+
+
+
+
+
+# =====================================================================================================================
+
+# this was a much more complicated way to do it, with 2 queries
+# when to use:
+    # if advanced calculations across multiple models (e.g., combining multiple foreign keys) were needed
+    # when dealing with non-related models (if requestservice wasn’t a direct relation to Service)
+    # when using custom aggregation beyond what .annotate() can do
+
+# def most_requested_services2(request):
+#     most_requested = (
+#         RequestService.objects.values("service")
+#         # group by Service foreign key
+#         .annotate(request_count=Count("service"))
+#         # count requests per service
+#         # Count: An aggregation function from Django’s django.db.models—used to count records in the database
+#         .order_by("-request_count")[:10]
+#         # order by most requested
+#     )
+
+#     services = Service.objects.filter(id__in=[item["service"] for item in most_requested])
+#     # its better to get the actual Service objects for display by filtering with the service IDs from the
+#     #  first query. This lets us access all Service attributes (name, description, etc)
+#     # what this line does:
+#     # -- each item in most_requested is a dictionary with these keys: {'service': 3, 'request_count': 15}
+#     # -- item["service"] represents the ID of the requested service
+#     # -- list comprehension: it creates a list of service IDs from the most_requested queryset. Example: [3, 7, 12, 4, 9]
+#     # -- id__in: This is a Django lookup that filters by a list of values (SQL IN clause):
+#     # SELECT * FROM service
+#     # WHERE id IN (3, 7, 12, 4, 9)
+#     # so services actually return something like this:
+#     # <QuerySet [
+#     #     <Service: Cleaning (id=3)>,
+#     #     <Service: Plumbing (id=7)>,
+#     #     <Service: Gardening (id=12)>
+#     #  ]>
+
+#     service_counts = {item["service"]: item["request_count"] for item in most_requested}
+#     # this is a dictionary where we link each service with its request_count
+#     # so service_counts actually return something like this:
+#     # {
+#     #     3: 15,  service ID 3: 15 requests
+#     #     7: 9,   service ID 7: 9 requests
+#     #     12: 5   service ID 12: 5 requests
+#     # }
+
+#     services_with_counts = [{"service": service, "request_count": service_counts[service.id]} for service in services]
+#     # we create a list of dictionaries, each one containing both the service object and its request_count
+#     # so services_with_counts actually return something like this:
+#     #     [
+#     #     {"service": <Service: Cleaning (id=3)>,
+#     #       "request_count": 15
+#     #     },
+#     #     {"service": <Service: Plumbing (id=7)>,
+#     #      "request_count": 9
+#     #     },
+#     #     {"service": <Service: Gardening (id=12)>,
+#     #      "request_count": 5
+#     #     }
+#     # ]
+
+#     return render(request, "services/most_requested.html", {"services": services_with_counts})
