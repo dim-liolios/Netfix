@@ -6,12 +6,12 @@
 <h1>Most Requested Services</h1>
 <div class='services_list_wrapper'>
     {% if services %}
-    <ul class="services_list">
-    {% for service in services %}
+        <ul class="services_list">
+        {% for service in services %}
             <li class="service-item">
                 <div>
                     <a href="{% url 'single_service' service.id %}">{{ service.name }}</a>
-                    - {{ service.field }}
+                    - {{ service.field }} ❱❱ {{ service.price_hour }}
                     - {{ service.request_count }} requests
                 </div>    
                 <div class="company">
@@ -22,7 +22,7 @@
                 </div>
             </li>
         {% endfor %}
-    </ul>
+        </ul>
     {% else %}
         <h2>Sorry, no requested services available yet.</h2>
     {% endif %}
