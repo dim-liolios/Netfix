@@ -128,13 +128,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-# Path to the static directory where additional static files are stored
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "main", "static"),  # Add your 'static/' directory here
-]
+# ===================================================================================
+# when DEBUG = False:
 
-# Where static files will be collected (for production)
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Path to the static directory where additional static files are stored
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "main", "static"),  # Add your 'static/' directory here
+# ]
+
+# # Where static files will be collected (for production)
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# ===================================================================================
+
+# ==>> ignore all above if "py manage.py runserver --insecure" is used
 
 # URL for serving static files
 STATIC_URL = "/static/"
