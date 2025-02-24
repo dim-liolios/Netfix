@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
-from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf.urls.static import static
 
+import services.views
 from . import views
 
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path("register/", include("users.urls")),
     path("customer/<slug:name>", views.customer_profile, name="customer_profile"),
     path("company/<slug:name>", views.company_profile, name="company_profile"),
+    path("most_requested/", services.views.most_requested_services, name="most_requested_services"),
     path("admin/", admin.site.urls),
 ]
 
