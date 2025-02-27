@@ -144,3 +144,7 @@ USE_TZ = True
 
 # URL for serving static files
 STATIC_URL = "/static/"
+
+LOGIN_URL = "/login/"
+# we tell Django what is our login url (if its not the default: /accounts/login/), so it can be used from the "@login_required" decorator
+# in netfix/views just before customer_profile view.

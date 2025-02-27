@@ -44,3 +44,6 @@ reset DB pk:
     go to c:/Program Files/SQLite and rename "sqlite3_disabled.exe" back to sqlite3.exe
     python manage.py dbshell
     DELETE FROM sqlite_sequence WHERE name='users_user';
+
+<!-- admin -->
+<!-- static files ???? -->

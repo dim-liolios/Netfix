@@ -24,7 +24,7 @@ def login_view(request):
         form = UserLoginForm(request.POST)  # this form contains the submitted data from the user
         if form.is_valid():
             user = authenticate(username=form.cleaned_data["username"], password=form.cleaned_data["password"])
-            # i) ses Django’s authentication system to verify credentials.
+            # i) uses Django’s authentication system to verify credentials.
             # ii) returns a User object if credentials are valid; otherwise, returns None.
             if user:
                 login(request, user)  # logs the user in
@@ -35,7 +35,7 @@ def login_view(request):
 
     # else method is GET when the user first opens the page and no input has been passed
     else:
-        form = UserLoginForm()  # Create an empty form for GET requests
+        form = UserLoginForm()  # create an empty form for GET requests
         return render(request, "main/login_user.html", {"form": form})
 
     # we imprort the users' login form from users/forms.py
