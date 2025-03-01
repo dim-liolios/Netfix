@@ -12,8 +12,17 @@ urlpatterns = [
     path("customer/<slug:name>", views.customer_profile, name="customer_profile"),
     path("company/<slug:name>", views.company_profile, name="company_profile"),
     path("most_requested/", services.views.most_requested_services, name="most_requested_services"),
-    path("admin/", admin.site.urls),
+    path("admin_panel/", admin.site.urls),
 ]
+# admin page handling:
+# Django does not restrict access to /admin by user permissions (like is_staff or is_superuser)
+# this means that if an authenticated user who is not a staff member tries to access /admin, he can still access it
+# (even though he wont be able to login)
+# so what i do is change the url that leads to the admin page
+
+
+
+
 
 # ======================================================================================
 # Django doesnt automatically runs static files when settings.DEBUG = False,

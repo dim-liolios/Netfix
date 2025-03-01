@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from datetime import date
+from django.contrib import admin
+from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 
 from users.models import User, Company, Customer
 from services.models import Service, RequestService
 
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 def home(request):
     return render(request, "users/home.html", {"user": request.user})
