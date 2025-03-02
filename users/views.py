@@ -39,6 +39,10 @@ class CustomerSignUpView(CreateView):
     def form_valid(self, form):  # this form argument is the validated instance of the CustomerSignUpForm
         if form.is_valid():
             user = form.save()
+
+            backend = get_backends()[0]
+            user.backend = f"{backend.__module__}.{backend.__class__.__name__}"
+
             login(self.request, user)  # he is immediatly logged in here
             return redirect("/")
         else:
