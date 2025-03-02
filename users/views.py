@@ -42,6 +42,7 @@ class CustomerSignUpView(CreateView):
 
             backend = get_backends()[0]
             user.backend = f"{backend.__module__}.{backend.__class__.__name__}"
+            # we tell Django to use the first authentication backend in settings.py / AUTHENTICATION_BACKENDS
 
             login(self.request, user)  # he is immediatly logged in here
             return redirect("/")
