@@ -112,13 +112,14 @@ class CustomerSignUpForm(UserCreationForm):
 
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Enter Username"}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Enter Email"}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Enter Password"}))
     # Django built-in authenticate() uses username and password, not email
+    # thats why we have to create a custom authentication method in main/authentication.py
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].widget.attrs["autocomplete"] = "off"
+        self.fields["email"].widget.attrs["autocomplete"] = "off"
         # tells browsers not to suggest previously entered emails
 
     def clean(self):
@@ -129,11 +130,11 @@ class UserLoginForm(forms.Form):
         cleaned_data = super().clean()  # => method of parent class forms.Form that returns
         # a dictionary where keys are the "email", "pass" etc and values the user's inputs.
 
-        username = cleaned_data.get("username")
+        email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        if username and password:
-            user = authenticate(username=username, password=password)
+        if email and password:
+            user = authenticate(email=email, password=password)
             if not user:
                 raise forms.ValidationError("Invalid username or password. If you don't have an account, register first.")
 

@@ -6,6 +6,13 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class User(AbstractUser):
     is_customer = models.BooleanField(default=False)
     is_company = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    def __str__(self):
+        return self.email
 
 
 class Customer(models.Model):

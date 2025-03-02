@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "-4c+@3tup)%is6x+4s1(c39ozkx_4u21_c!k5i1)_szqpn+f_c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # When also hosting on the interet:
@@ -148,3 +148,8 @@ STATIC_URL = "/static/"
 LOGIN_URL = "/login/"
 # we tell Django what is our login url (if its not the default: /accounts/login/), so it can be used from the "@login_required" decorator
 # in netfix/views just before customer_profile view.
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'main.authentication.EmailAuthBackend',
+)
