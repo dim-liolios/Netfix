@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as django_logout
 
 from users.forms import UserLoginForm
-
+from django.contrib.auth import login, authenticate, get_backends
 
 def home(request):
     return render(request, "main/home.html", {})
@@ -25,9 +25,11 @@ def login_view(request):
         
         if form.is_valid():
             user = authenticate(request, email=form.cleaned_data["email"], password=form.cleaned_data["password"])
-            # i) uses Django’s authentication system to verify credentials.
+            # i) uses the custom authentication function/method from authentication.py to verify credentials.
             # ii) returns a User object if credentials are valid; otherwise, returns None.
             if user:
+                backend = get_backends()[0]
+                user.backend = f"{backend.__module__}.{backend.__class__.__name__}"
                 login(request, user)  # logs the user in
                 return redirect("/")  # redirects to homepage logged in
             else:

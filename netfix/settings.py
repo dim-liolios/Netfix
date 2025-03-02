@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "-4c+@3tup)%is6x+4s1(c39ozkx_4u21_c!k5i1)_szqpn+f_c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 # When also hosting on the interet:
@@ -150,6 +150,6 @@ LOGIN_URL = "/login/"
 # in netfix/views just before customer_profile view.
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'main.authentication.EmailAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.views.generic import CreateView
+from django.contrib.auth import login, get_backends
 
 from .forms import CustomerSignUpForm, CompanySignUpForm
 from .models import User
@@ -37,19 +38,16 @@ class CustomerSignUpView(CreateView):
 
     def form_valid(self, form):  # this form argument is the validated instance of the CustomerSignUpForm
         if form.is_valid():
-            print("✅ Form is valid!")
             user = form.save()
-            print(f"✅ User saved: {user.username}")
-            # when the form has pass the validation 
             login(self.request, user)  # he is immediatly logged in here
             return redirect("/")
         else:
-            print("❌ Form errors: %s", form.errors)
             return self.form_invalid(form)
 
     #  Django, internally knows and handles:
     #  when the page opens first time, the method is GET and get_context_data runs
     #  when the client submits his form, the method is POST and form_valid runs
+
 
 # =================================================================================================
 
@@ -66,11 +64,12 @@ class CompanySignUpView(CreateView):
 
     def form_valid(self, form):
         if form.is_valid():
-            print("✅ Form is valid!")
             user = form.save()
-            print(f"✅ User saved: {user.username}")
+
+            backend = get_backends()[0]
+            user.backend = f"{backend.__module__}.{backend.__class__.__name__}"
+
             login(self.request, user)
             return redirect("/")
         else:
-            print("❌ Form errors: %s", form.errors)
             return self.form_invalid(form)

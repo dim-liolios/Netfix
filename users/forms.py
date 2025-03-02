@@ -54,10 +54,8 @@ class CompanySignUpForm(UserCreationForm):
 
         if commit:
             user.save()  # saving the user as Company
-            print(f"✅ User saved: {user.username}")
             Company.objects.create(user=user, field=self.cleaned_data["field_of_work"])
             # creating the company instance and link it to the user
-            print("✅ Company created!")
 
         return user
 
@@ -104,9 +102,7 @@ class CustomerSignUpForm(UserCreationForm):
 
         if commit:
             user.save()
-            print(f"✅ User saved: {user.username}")
             Customer.objects.create(user=user, date_of_birth=self.cleaned_data["date_of_birth"])
-            print("✅ Customer created!")
 
         return user
 
