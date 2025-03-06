@@ -8,16 +8,18 @@
         <p class="title">{{field}} Services</p>
         <ul class='services_list'>
             {% for service in services.all %}
-                <div style="display: ruby;">
-                    <div class='service_list_info'>
-                        <li><a href="/services/{{service.id}}">{{ service.name }}</a>-- {{ service.price_hour }}€/hour</li>
-                        <pre>{{ service.description }}</pre>
-                    </div>
-                    <p style="display:block; margin: 0; float: right;font-size: small; margin-right: 30px;">by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></p>
+            <li class="service-item">
+                <div>
+                    <a href="{% url 'single_service' service.id %}">{{ service.name }}</a>
+                    -- {{ service.price_hour }} €/hour
+                </div>    
+                <div class="company">
+                    Provided by: 
+                    <a href="{% url 'company_profile' service.company.user.username %}">
+                    {{ service.company.user.username }} 
+                    </a>
                 </div>
-                {% if forloop.counter != services.all|length %}
-                    <div class="line"></div>
-                {% endif %}
+            </li>
             {% endfor %}
         </ul>
     {% else %}
