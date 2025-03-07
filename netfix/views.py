@@ -10,10 +10,6 @@ from services.models import Service, RequestService
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-def home(request):
-    return render(request, "users/home.html", {"user": request.user})
-
-
 def calculate_age(birth_date):
     today = date.today()
     return today.year - birth_date.year
